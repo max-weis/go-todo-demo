@@ -6,3 +6,14 @@ tr:nth-child(n):hover {
 .card {
     max-height: 450px;
 }
+
+.pagination-item{
+    cursor: pointer;
+}
+
+.table-wrapper{
+    border-radius: .25rem;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .1);
+}

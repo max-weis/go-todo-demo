@@ -108,30 +108,67 @@
     <div class="row justify-center">
         <!-- Table -->
         <div class="col w-12 md:w-8">
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Status</th>
-                        <th>Position</th>
-                        <th>Title</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{range $todo := .Todos}}
+            {{if .Todos}}
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
                         <tr>
-                            <td><input type="checkbox" class="input"
-                                        {{if (eq $todo.Status true)}}
-                                    checked
-                                        {{end}}>
-                            </td>
-                            <td>{{$todo.ID}}</td>
-                            <td>{{$todo.Title}}</td>
+                            <th>Status</th>
+                            <th>Position</th>
+                            <th>Title</th>
                         </tr>
-                    {{end}}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                        {{range $todo := .Todos}}
+                            <tr>
+                                <td><input type="checkbox" class="input"
+                                            {{if (eq $todo.Status true)}}
+                                        checked
+                                            {{end}}>
+                                </td>
+                                <td>{{$todo.ID}}</td>
+                                <td>{{$todo.Title}}</td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+                <section class="section">
+                    <div class="pagination">
+                        <a onclick="changePage(this)" class="pagination-item pagination-item--top-level">Back</a>
+                        <a onclick="changePage(this)" class="pagination-item pagination-item--top-level">Next</a>
+                        <select id="limit">
+                            <option onclick="changePage(this,5)" value="5"
+                                    {{if (eq .Limit 5)}}
+                                selected="selected"
+                                    {{end}}>5
+                            </option>
+                            <option onclick="changePage(this,10)" value="10"
+                                    {{if (eq .Limit 10)}}
+                                selected="selected"
+                                    {{end}}>10
+                            </option>
+                            <option onclick="changePage(this,25)" value="25"
+                                    {{if (eq .Limit 25)}}
+                                selected="selected"
+                                    {{end}}>25
+                            </option>
+                        </select>
+                    </div>
+                </section>
+            {{else}}
+                <div class="quote">
+                    <div class="quote-author">
+                        <div class="quote-bar"></div>
+                        <img class="quote-author__picture"
+                             src="https://www.openknowledge.de//wp-content/themes/okw/public/images/pikto-lupe.svg">
+
+                        <div class="quote-author__meta">
+                            <span>no todos found :/</span>
+                        </div>
+                    </div>
+                </div>
+            {{end}}
         </div>
 
         <!-- Card -->
@@ -177,5 +214,6 @@
     </div>
 </footer>
 <script src="/stylelib/main.js"></script>
+<script src="/stylelib/pagination.js"></script>
 </body>
 </html>

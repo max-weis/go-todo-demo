@@ -63,7 +63,10 @@ func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 
 	var resp = struct {
 		Todos []gotodo.Todo `json:"todos"`
-	}{Todos: todos}
+
+		Offset int
+		Limit  int
+	}{Todos: todos, Offset: offset, Limit: limit}
 
 	tmpl, err := template.ParseFiles("static/index.html")
 	if err != nil {
