@@ -1,0 +1,170 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/stylelib/styles.css">
+    <link rel="stylesheet" href="/stylelib/custom.css">
+</head>
+<body>
+<header>
+    <div class="topbar">
+        <div class="container">
+            <div class="topbar__content">
+                <div class="topbar__item">
+                    <label class="search-form">
+                        <img class="search-form__pictogram search-form__pictogram--open search-form--toggle"
+                             src="https://www.openknowledge.de//wp-content/themes/okw/public/images/pikto-lupe.svg"
+                             width="26" height="26">
+                        <img class="search-form__pictogram search-form__pictogram--close"
+                             src="https://www.openknowledge.de//wp-content/themes/okw/public/images/pikto-cross.svg"
+                             width="26" height="26">
+
+                        <span class="search-form__control">
+              <form role="search" method="get" action="https://www.openknowledge.de/">
+                <input type="search" class="input" name="s">
+              </form>
+            </span>
+                    </label>
+                </div>
+
+                <div class="topbar-item">
+                    <a href="tel:+49 441 4082-0" class="icon-link icon-link--shrink">
+                        <i class="fas fa-phone"></i>
+                        <span>+49 441 4082-0</span>
+                    </a>
+                </div>
+
+                <div class="topbar-item">
+                    <a href="mailto:kontakt@openknowledge.de" class="icon-link icon-link--shrink">
+                        <i class="fas fa-envelope"></i>
+                        <span>kontakt@openknowledge.de</span>
+                    </a>
+                </div>
+
+                <div class="topbar-item w-12">
+                    <div class="search-form search-form--mobile">
+                        <img class="search-form__pictogram search-form__pictogram--open"
+                             src="https://www.openknowledge.de//wp-content/themes/okw/public/images/pikto-lupe.svg"
+                             width="26" height="26">
+                        <span class="search-form__control">
+              <form role="search" method="get" action="https://www.openknowledge.de/">
+                <input type="search" class="input" name="s">
+              </form>
+          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <div class="container">
+            <div class="nav__content">
+                <a href="#" class="nav__logo">
+                    <img width="190" height="86"
+                         src="https://www.openknowledge.de//wp-content/uploads/2017/02/OPK_Logo_waag_kl_RGB-e1486736462466-190x86.png"
+                         class="attachment-page-logo size-page-logo" alt=""
+                         srcset="https://www.openknowledge.de//wp-content/uploads/2017/02/OPK_Logo_waag_kl_RGB-e1486736462466-190x86.png 190w, https://www.openknowledge.de//wp-content/uploads/2017/02/OPK_Logo_waag_kl_RGB-e1486736462466-300x136.png 300w, https://www.openknowledge.de//wp-content/uploads/2017/02/OPK_Logo_waag_kl_RGB-e1486736462466-768x347.png 768w, https://www.openknowledge.de//wp-content/uploads/2017/02/OPK_Logo_waag_kl_RGB-e1486736462466-1024x463.png 1024w, https://www.openknowledge.de//wp-content/uploads/2017/02/OPK_Logo_waag_kl_RGB-e1486736462466-128x58.png 128w, https://www.openknowledge.de//wp-content/uploads/2017/02/OPK_Logo_waag_kl_RGB-e1486736462466-770x348.png 770w"
+                         sizes="(max-width: 190px) 100vw, 190px">
+                </a>
+
+                <div class="nav__menu">
+                    <span class="nav__menu-bar"></span>
+                    <span class="nav__menu-bar"></span>
+                    <span class="nav__menu-bar"></span>
+                </div>
+
+                <div class="nav__links">
+                    <ul class="nav__links-content">
+                        <li class="nav__link">
+                            <a href="#">Expertise</a>
+                        </li>
+
+                        <li class="nav__link">
+                            <a href="#">Projekte</a>
+                        </li>
+
+                        <li class="nav__link">
+                            <a href="#">Karriere</a>
+                        </li>
+
+                        <li class="nav__link">
+                            <a href="#">Wissen</a>
+                        </li>
+
+                        <li class="nav__link">
+                            <a href="#">Blog</a>
+                        </li>
+
+                        <li class="nav__link">
+                            <a href="#">Events</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="row justify-center">
+        <div class="col w-12 md:w-8">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Position</th>
+                        <th>Title</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{range $todo := .Todos}}
+                        <tr>
+                            <td><input type="checkbox"
+                                        {{if (eq $todo.Status true)}}
+                                            checked
+                                        {{end}}
+                                ></td>
+                            <td>{{$todo.ID}}</td>
+                            <td>{{$todo.Title}}</td>
+                        </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card col w-12 md:w-4"
+             style="background-image: url(https://www.openknowledge.de//wp-content/uploads/2019/01/headway-1120645-unsplash-752x321.jpg);">
+            <div class="card__content card__content--event">
+                <div class="card__header">
+                    <div class="section-header">
+                        <h3 class="section-header__secondary">Philosophie</h3>
+                        <h2 class="section-header__primary">Architecture Summit München</h2>
+                    </div>
+                </div>
+                <div class="card__body">Vom 11. bis 13. März 2019 findet die Architecture Summit in München statt. Der
+                    Software Architecture Summit ist für alle Softwarearchitekten, [...]
+                </div>
+                <div class="card__footer"><a class="btn btn--read-more" href="#">mehr lesen</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer>
+    <div class="container">
+        <div class="grid">
+            <div class="row justify-end">
+                <div class="col w-12">
+                    <ul class="footer__menu">
+                        <li><a href="https://www.openknowledge.de/impressum/">Impressum</a></li>
+                        <li><a href="https://www.openknowledge.de/datenschutz/">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="/stylelib/main.js"></script>
+</body>
+</html>

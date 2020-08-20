@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	gotodo "todo"
 )
 
@@ -19,7 +21,35 @@ func (t *todoHandler) FindById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {
-	log.Printf("FindAll")
+	params := r.URL.Query()
+
+	pLimit := params["limit"]
+	pOffset := params["offset"]
+
+	limit, err := strconv.Atoi(pLimit[0])
+	if err != nil {
+
+	}
+
+	offset, err := strconv.Atoi(pOffset[0])
+	if err != nil {
+
+	}
+
+	todos, err := t.s.FindAll(limit, offset)
+	if err != nil {
+
+	}
+
+	var resp = struct {
+		Todos []gotodo.Todo `json:"todos"`
+	}{Todos: todos}
+
+	tmpl, err := template.ParseFiles("static/index.html")
+	if err != nil {
+		log.Printf("could not read html: %v", err)
+	}
+	tmpl.Execute(w, resp)
 }
 
 func (t *todoHandler) Delete(w http.ResponseWriter, r *http.Request) {

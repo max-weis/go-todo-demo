@@ -19,7 +19,7 @@ func NewTodo(title string, description string) *Todo {
 type Service interface {
 	Create(title, description string) (Todo, error)
 	FindById(id uint) (Todo, error)
-	FindAll(limit, offset uint) ([]Todo, error)
+	FindAll(limit, offset int) ([]Todo, error)
 	Delete(id uint) (Todo, error)
 	Update(title, description string, status bool) (Todo, error)
 }
@@ -27,7 +27,7 @@ type Service interface {
 type Repository interface {
 	Create(title, description string) (Todo, error)
 	FindById(id uint) (Todo, error)
-	FindAll(limit, offset uint) ([]Todo, error)
+	FindAll(limit, offset int) ([]Todo, error)
 	Delete(id uint) (Todo, error)
 	Update(title, description string, status bool) (Todo, error)
 }
