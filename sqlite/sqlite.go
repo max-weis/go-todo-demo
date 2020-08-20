@@ -23,7 +23,10 @@ func NewTodoRepository(db gorm.DB) *todoRepository {
 }
 
 func (t *todoRepository) Create(title, description string) (gotodo.Todo, error) {
-	panic("implement me")
+	todo := gotodo.NewTodo(title, description)
+	newTodo := t.db.Create(todo)
+
+	return *todo, newTodo.Error
 }
 
 func (t *todoRepository) FindById(id uint) (gotodo.Todo, error) {
@@ -33,7 +36,6 @@ func (t *todoRepository) FindById(id uint) (gotodo.Todo, error) {
 func (t *todoRepository) FindAll(limit, offset int) ([]gotodo.Todo, error) {
 	var todos []gotodo.Todo
 	find := t.db.Limit(limit).Offset(offset).Find(&todos)
-	//find := t.db.Find(&todos)
 
 	log.Printf("found %d todos", len(todos))
 

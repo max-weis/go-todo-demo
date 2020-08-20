@@ -24,6 +24,7 @@ func main() {
 
 	todoRepository = sqlite.NewTodoRepository(*db)
 	todoService = todo.NewService(todoRepository)
+	todoService = todo.NewLoggingService(todoService)
 
 	router := mux.NewRouter()
 	srv := controller.NewServer(todoService, router)

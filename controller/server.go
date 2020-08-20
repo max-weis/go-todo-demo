@@ -22,6 +22,8 @@ func NewServer(todoService todo.Service, router *mux.Router) *Server {
 	s.Router.HandleFunc("/todo/{id}", h.Update).Methods("PUT")
 	s.Router.HandleFunc("/todo", h.Delete).Methods("DELETE")
 
+	s.Router.HandleFunc("/error", h.Delete).Methods("GET")
+
 	staticDir := "/stylelib/"
 	s.Router.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("./static"+staticDir))))
 

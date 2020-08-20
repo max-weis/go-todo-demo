@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -13,7 +14,26 @@ type todoHandler struct {
 }
 
 func (t *todoHandler) Create(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Create")
+	err := r.ParseForm()
+	if err != nil {
+		log.Printf("error occured: %+v", err)
+		http.Redirect(w, r, "/error", 400)
+		return
+	}
+
+	title := r.Form["title"][0]
+	description := r.Form["description"][0]
+
+	todo, err := t.s.Create(title, description)
+	if err != nil {
+		log.Printf("error occured: %+v", err)
+		http.Redirect(w, r, "/error", 400)
+		return
+	}
+
+	redirectURL := fmt.Sprintf("/todo/%d", todo.ID)
+
+	http.Redirect(w, r, redirectURL, 301)
 }
 
 func (t *todoHandler) FindById(w http.ResponseWriter, r *http.Request) {

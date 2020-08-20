@@ -1,7 +1,6 @@
 package todo
 
 import (
-	"log"
 	"todo"
 )
 
@@ -22,7 +21,14 @@ func NewService(repository gotodo.Repository) *service {
 }
 
 func (s *service) Create(title, description string) (gotodo.Todo, error) {
-	panic("implement me")
+	if len(title) <= 0 {
+		return gotodo.Todo{}, gotodo.TitleEmptyErr
+	}
+	if len(title) <= 50 {
+		return gotodo.Todo{}, gotodo.TitleSizeErr
+	}
+
+	return s.repository.Create(title, description)
 }
 
 func (s *service) FindById(id uint) (gotodo.Todo, error) {
@@ -30,8 +36,6 @@ func (s *service) FindById(id uint) (gotodo.Todo, error) {
 }
 
 func (s *service) FindAll(limit, offset int) ([]gotodo.Todo, error) {
-	log.Printf("find todos with limit: %d and offset: %d", limit, offset)
-
 	return s.repository.FindAll(limit, offset)
 }
 

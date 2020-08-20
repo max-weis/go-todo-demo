@@ -106,58 +106,7 @@
 
 <div class="container">
     <div class="row justify-center">
-        <!-- Table -->
-        <div class="col w-12 md:w-8">
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Status</th>
-                        <th>Position</th>
-                        <th>Title</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{range $todo := .Todos}}
-                        <tr>
-                            <td><input type="checkbox" class="input"
-                                        {{if (eq $todo.Status true)}}
-                                    checked
-                                        {{end}}>
-                            </td>
-                            <td>{{$todo.ID}}</td>
-                            <td>{{$todo.Title}}</td>
-                        </tr>
-                    {{end}}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Card -->
-        <div class="card col w-12 md:w-4">
-            <form action="/todo" method="POST">
-                <div class="card__content card__content--event">
-                    <div class="card__header">
-                        <div class="section-header">
-                            <h2 class="section-header__primary">Add Todo</h2>
-                        </div>
-                    </div>
-                    <div class="card__body">
-                        <div class="form-control">
-                            <input type="text" class="input" name="title" placeholder="Title*">
-                        </div>
-                        <div class="form-control">
-                            <input type="text" class="input" name="description" placeholder="Description">
-                        </div>
-                    </div>
-                    <div class="card__footer">
-                        <input class="btn" type="submit" value="Submit"/>
-                        <h5>* required</h5>
-                    </div>
-                </div>
-            </form>
-        </div>
+        <h1>Error!</h1>
     </div>
 </div>
 
