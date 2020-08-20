@@ -12,6 +12,10 @@ type Todo struct {
 	Status      bool `gorm:"default:false"`
 }
 
+func NewTodo(title string, description string) *Todo {
+	return &Todo{Title: title, Description: description}
+}
+
 type Service interface {
 	Create(title, description string) (Todo, error)
 	FindById(id uint) (Todo, error)
