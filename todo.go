@@ -1,4 +1,4 @@
-package todo
+package gotodo
 
 import (
 	"errors"

@@ -1,12 +1,46 @@
 package main
 
 import (
-	"fmt"
-	"todo"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
+	gotodo "todo"
+	"todo/controller"
+	"todo/sqlite"
+	"todo/todo"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 func main() {
-	todo := todo.NewTodo("test title", "test description")
+	log.Println("start server")
 
-	fmt.Printf("id: %d, title: %s, description: %s, createdAt: %s, updatedAt: %s, deletedAt: %s", todo.ID, todo.Title, todo.Description, todo.CreatedAt, todo.UpdatedAt, todo.DeletedAt)
+	db := initDB()
+	defer db.Close()
+
+	var todoRepository sqlite.TodoRepository
+	var todoService todo.Service
+
+	todoRepository = sqlite.NewTodoRepository(*db)
+	todoService = todo.NewService(todoRepository)
+
+	router := mux.NewRouter()
+	srv := controller.NewServer(todoService, router)
+
+	http.ListenAndServe("0.0.0.0:8080", srv)
+
+	log.Println("listening on port 8080")
+}
+
+func initDB() *gorm.DB {
+	db, err := gorm.Open("sqlite3", "file::memory:?cache=shared")
+	if err != nil {
+		panic("could not read sqlite db")
+	}
+
+	db.AutoMigrate(&gotodo.Todo{})
+
+	log.Println("db initialized")
+	return db
 }
