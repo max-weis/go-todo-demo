@@ -18,17 +18,17 @@ func NewTodo(title string, description string) *Todo {
 
 type Service interface {
 	Create(title, description string) (Todo, error)
-	FindById(id uint) (Todo, error)
+	FindById(id int) (Todo, error)
 	FindAll(limit, offset int) ([]Todo, error)
-	Delete(id uint) (Todo, error)
+	Delete(id int) (Todo, error)
 	Update(title, description string, status bool) (Todo, error)
 }
 
 type Repository interface {
 	Create(title, description string) (Todo, error)
-	FindById(id uint) (Todo, error)
+	FindById(id int) (Todo, error)
 	FindAll(limit, offset int) ([]Todo, error)
-	Delete(id uint) (Todo, error)
+	Delete(id int) (Todo, error)
 	Update(title, description string, status bool) (Todo, error)
 }
 

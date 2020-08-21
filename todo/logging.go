@@ -19,8 +19,10 @@ func (l *loggingService) Create(title, description string) (gotodo.Todo, error) 
 	return l.next.Create(title, description)
 }
 
-func (l *loggingService) FindById(id uint) (gotodo.Todo, error) {
-	panic("implement me")
+func (l *loggingService) FindById(id int) (gotodo.Todo, error) {
+	log.Printf("find todo by id: %d", id)
+
+	return l.next.FindById(id)
 }
 
 func (l *loggingService) FindAll(limit, offset int) ([]gotodo.Todo, error) {
@@ -29,7 +31,7 @@ func (l *loggingService) FindAll(limit, offset int) ([]gotodo.Todo, error) {
 	return l.next.FindAll(limit, offset)
 }
 
-func (l *loggingService) Delete(id uint) (gotodo.Todo, error) {
+func (l *loggingService) Delete(id int) (gotodo.Todo, error) {
 	panic("implement me")
 }
 

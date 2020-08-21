@@ -8,9 +8,9 @@ import (
 
 type TodoRepository interface {
 	Create(title, description string) (gotodo.Todo, error)
-	FindById(id uint) (gotodo.Todo, error)
+	FindById(id int) (gotodo.Todo, error)
 	FindAll(limit, offset int) ([]gotodo.Todo, error)
-	Delete(id uint) (gotodo.Todo, error)
+	Delete(id int) (gotodo.Todo, error)
 	Update(title, description string, status bool) (gotodo.Todo, error)
 }
 
@@ -29,8 +29,12 @@ func (t *todoRepository) Create(title, description string) (gotodo.Todo, error) 
 	return *todo, newTodo.Error
 }
 
-func (t *todoRepository) FindById(id uint) (gotodo.Todo, error) {
-	panic("implement me")
+func (t *todoRepository) FindById(id int) (gotodo.Todo, error) {
+	var todo gotodo.Todo
+
+	first := t.db.Find(&todo, id)
+
+	return todo, first.Error
 }
 
 func (t *todoRepository) FindAll(limit, offset int) ([]gotodo.Todo, error) {
@@ -42,7 +46,7 @@ func (t *todoRepository) FindAll(limit, offset int) ([]gotodo.Todo, error) {
 	return todos, find.Error
 }
 
-func (t *todoRepository) Delete(id uint) (gotodo.Todo, error) {
+func (t *todoRepository) Delete(id int) (gotodo.Todo, error) {
 	panic("implement me")
 }
 

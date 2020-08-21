@@ -3,7 +3,6 @@
     <title>Go Todo App</title>
     <link rel="stylesheet" href="/stylelib/styles.css">
     <link rel="stylesheet" href="/stylelib/custom.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <header>
@@ -108,97 +107,28 @@
 
 <div class="container">
     <div class="row justify-center">
-        <!-- Table -->
-        <div class="col w-12 md:w-8">
-            {{if .Todos}}
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Position</th>
-                            <th>Title</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{range $todo := .Todos}}
-                            <tr>
-                                <td><input type="checkbox" class="input"
-                                            {{if (eq $todo.Status true)}}
-                                        checked
-                                            {{end}}>
-                                </td>
-                                <td>{{$todo.ID}}</td>
-                                <td>{{$todo.Title}}</td>
-                            </tr>
-                        {{end}}
-                        </tbody>
-                    </table>
-                </div>
-                <section class="section">
-                    <div class="pagination">
-                        <a onclick="changePage(this)" class="pagination-item pagination-item--top-level">Back</a>
-                        <a onclick="changePage(this)" class="pagination-item pagination-item--top-level">Next</a>
-                        <select id="limit">
-                            <option onclick="changePage(this,5)" value="5"
-                                    {{if (eq .Limit 5)}}
-                                selected="selected"
-                                    {{end}}>5
-                            </option>
-                            <option onclick="changePage(this,10)" value="10"
-                                    {{if (eq .Limit 10)}}
-                                selected="selected"
-                                    {{end}}>10
-                            </option>
-                            <option onclick="changePage(this,25)" value="25"
-                                    {{if (eq .Limit 25)}}
-                                selected="selected"
-                                    {{end}}>25
-                            </option>
-                        </select>
-                    </div>
-                </section>
-            {{else}}
-                <div class="quote">
-                    <div class="quote-author">
-                        <div class="quote-bar"></div>
-                        <img class="quote-author__picture"
-                             src="https://www.openknowledge.de//wp-content/themes/okw/public/images/pikto-lupe.svg">
-
-                        <div class="quote-author__meta">
-                            <span>no todos found :/</span>
-                        </div>
+        <div class="card w-6">
+            <div class="card__content card__content--event">
+                <div class="card__header">
+                    <div class="section-header">
+                        <h3 class="section-header__secondary">Todo Detail</h3>
                     </div>
                 </div>
-            {{end}}
-        </div>
-
-        <!-- Card -->
-        <div class="card col w-12 md:w-4">
-            <form action="/todo" method="POST">
-                <div class="card__content card__content--event">
-                    <div class="card__header">
-                        <div class="section-header">
-                            <h2 class="section-header__primary">Add Todo</h2>
-                        </div>
-                    </div>
-                    <div class="card__body">
-                        <div class="form-control">
-                            <input type="text" class="input" name="title" placeholder="Title*">
-                        </div>
-                        <div class="form-control">
-                            <input type="text" class="input" name="description" placeholder="Description">
-                        </div>
-                    </div>
-                    <div class="card__footer">
-                        <input class="btn" type="submit" value="Submit"/>
-                        <h5>* required</h5>
-                    </div>
+                <div class="card__body">
+                    <strong>Title:</strong>
+                    <p>{{.Todo.Title}}</p>
+                    <br>
+                    <strong>Description:</strong>
+                    <p>{{.Todo.Description}}</p>
                 </div>
-            </form>
+                <div class="card__footer">
+                    <a class="btn btn--read-more">edit</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 
 <footer>
     <div class="container">
@@ -215,6 +145,5 @@
     </div>
 </footer>
 <script src="/stylelib/main.js"></script>
-<script src="/stylelib/pagination.js"></script>
 </body>
 </html>

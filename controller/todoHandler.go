@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"html/template"
 	"log"
 	"net/http"
@@ -37,7 +38,27 @@ func (t *todoHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) FindById(w http.ResponseWriter, r *http.Request) {
-	log.Printf("FindById")
+	vars := mux.Vars(r)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+
+	}
+
+	todo, err := t.s.FindById(id)
+	if err != nil {
+
+	}
+
+	var resp = struct {
+		Todo gotodo.Todo
+	}{Todo: todo}
+
+	tmpl, err := template.ParseFiles("static/detail.html")
+	if err != nil {
+		log.Printf("could not read html: %v", err)
+	}
+	tmpl.Execute(w, resp)
 }
 
 func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {

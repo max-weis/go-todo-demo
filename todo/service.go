@@ -6,9 +6,9 @@ import (
 
 type Service interface {
 	Create(title, description string) (gotodo.Todo, error)
-	FindById(id uint) (gotodo.Todo, error)
+	FindById(id int) (gotodo.Todo, error)
 	FindAll(limit, offset int) ([]gotodo.Todo, error)
-	Delete(id uint) (gotodo.Todo, error)
+	Delete(id int) (gotodo.Todo, error)
 	Update(title, description string, status bool) (gotodo.Todo, error)
 }
 
@@ -31,15 +31,15 @@ func (s *service) Create(title, description string) (gotodo.Todo, error) {
 	return s.repository.Create(title, description)
 }
 
-func (s *service) FindById(id uint) (gotodo.Todo, error) {
-	panic("implement me")
+func (s *service) FindById(id int) (gotodo.Todo, error) {
+	return s.repository.FindById(id)
 }
 
 func (s *service) FindAll(limit, offset int) ([]gotodo.Todo, error) {
 	return s.repository.FindAll(limit, offset)
 }
 
-func (s *service) Delete(id uint) (gotodo.Todo, error) {
+func (s *service) Delete(id int) (gotodo.Todo, error) {
 	panic("implement me")
 }
 
