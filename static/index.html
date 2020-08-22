@@ -132,7 +132,7 @@
                                             {{end}}>
                                 </td>
                                 <td>{{$todo.ID}}</td>
-                                <td>{{$todo.Title}}</td>
+                                <td onclick="showDetail({{$todo.ID}})">{{$todo.Title}}</td>
                                 <td onclick="remove({{$todo.ID}})">&#10005;</td>
                             </tr>
                         {{end}}

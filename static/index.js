@@ -1,5 +1,4 @@
 function changeStatus(elem, id) {
-    console.log(elem.checked)
     let request = new XMLHttpRequest();
     request.open("PATCH", "http://localhost:8080/todo/" + id + "?status=" + elem.checked, false)
     request.send(null)
@@ -87,4 +86,8 @@ function changePage(elem, selectedLimit) {
 
 function back() {
     window.location.href = "http://" + location.hostname + ":" + location.port + "/todo?offset=0&limit=5"
+}
+
+function showDetail(id) {
+    window.location.href = "http://" + location.hostname + ":" + location.port + "/todo/" + id
 }
