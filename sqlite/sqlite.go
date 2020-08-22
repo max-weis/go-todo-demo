@@ -10,7 +10,8 @@ type TodoRepository interface {
 	FindById(id int) (gotodo.Todo, error)
 	FindAll(limit, offset int) ([]gotodo.Todo, error)
 	Delete(id int) (gotodo.Todo, error)
-	Update(title, description string, status bool) (gotodo.Todo, error)
+	Update(id int, title, description string, status bool) (gotodo.Todo, error)
+	Done(id int, status bool) (gotodo.Todo, error)
 }
 
 type todoRepository struct {
@@ -50,6 +51,28 @@ func (t *todoRepository) Delete(id int) (gotodo.Todo, error) {
 	return todo, delete.Error
 }
 
-func (t *todoRepository) Update(title, description string, status bool) (gotodo.Todo, error) {
-	panic("implement me")
+func (t *todoRepository) Update(id int, title, description string, status bool) (gotodo.Todo, error) {
+	var todo gotodo.Todo
+
+	t.db.First(&todo, id)
+
+	todo.Title = title
+	todo.Description = description
+	todo.Status = status
+
+	newTodo := t.db.Save(&todo)
+
+	return todo, newTodo.Error
+}
+
+func (t *todoRepository) Done(id int, status bool) (gotodo.Todo, error) {
+	var todo gotodo.Todo
+
+	t.db.First(&todo, id)
+
+	todo.Status = status
+
+	newTodo := t.db.Save(&todo)
+
+	return todo, newTodo.Error
 }

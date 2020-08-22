@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/stylelib/styles.css">
     <link rel="stylesheet" href="/stylelib/custom.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="https://www.openknowledge.de//wp-content/themes/okw/public/favicon/favicon-16x16.png">
 </head>
 <body>
 <header>
@@ -125,7 +126,7 @@
                         <tbody>
                         {{range $todo := .Todos}}
                             <tr>
-                                <td><input type="checkbox" class="input"
+                                <td><input type="checkbox" class="input" onclick="changeStatus(this,{{$todo.ID}})"
                                             {{if (eq $todo.Status true)}}
                                         checked
                                             {{end}}>
@@ -220,5 +221,6 @@
 <script src="/stylelib/main.js"></script>
 <script src="/stylelib/pagination.js"></script>
 <script src="/stylelib/remove.js"></script>
+<script src="/stylelib/updateStatus.js"></script>
 </body>
 </html>

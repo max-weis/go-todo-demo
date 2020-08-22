@@ -21,7 +21,8 @@ type Service interface {
 	FindById(id int) (Todo, error)
 	FindAll(limit, offset int) ([]Todo, error)
 	Delete(id int) (Todo, error)
-	Update(title, description string, status bool) (Todo, error)
+	Update(id int, title, description string, status bool) (Todo, error)
+	Done(id int, status bool) (Todo, error)
 }
 
 type Repository interface {
@@ -29,7 +30,8 @@ type Repository interface {
 	FindById(id int) (Todo, error)
 	FindAll(limit, offset int) ([]Todo, error)
 	Delete(id int) (Todo, error)
-	Update(title, description string, status bool) (Todo, error)
+	Update(id int, title, description string, status bool) (Todo, error)
+	Done(id int, status bool) (Todo, error)
 }
 
 var TitleEmptyErr = errors.New("title should not be empty")

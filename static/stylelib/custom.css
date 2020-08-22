@@ -3,15 +3,11 @@ tr:nth-child(n):hover {
     cursor: pointer;
 }
 
-.card {
-    max-height: 450px;
-}
-
-.pagination-item{
+.pagination-item {
     cursor: pointer;
 }
 
-.table-wrapper{
+.table-wrapper {
     border-radius: .25rem;
     padding: 1rem;
     background-color: #fff;

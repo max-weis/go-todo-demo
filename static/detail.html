@@ -5,6 +5,7 @@
     <title>Go Todo App</title>
     <link rel="stylesheet" href="/stylelib/styles.css">
     <link rel="stylesheet" href="/stylelib/custom.css">
+    <link rel="icon" href="https://www.openknowledge.de//wp-content/themes/okw/public/favicon/favicon-16x16.png">
 </head>
 <body>
 <header>
@@ -118,13 +119,28 @@
                 </div>
                 <div class="card__body">
                     <strong>Title:</strong>
-                    <p>{{.Todo.Title}}</p>
+                    <p id="title">{{.Todo.Title}}</p>
+                    <div class="form-control">
+                        <input style="display: none" id="title-input" type="text" class="input" name="title" value="{{.Todo.Title}}">
+                    </div>
                     <br>
                     <strong>Description:</strong>
-                    <p>{{.Todo.Description}}</p>
+                    <p id="description">{{.Todo.Description}}</p>
+                    <div class="form-control">
+                        <textarea style="display: none" id="description-input" class="input" name="description">{{.Todo.Description}}</textarea>
+                    </div>
+                    <br>
+                    <strong>Status:</strong>
+                    {{if (eq .Todo.Status true)}}
+                        <p id="status">Done</p>
+                    {{else}}
+                        <p id="status">Open</p>
+                    {{end}}
+                    <input style="display: none" id="status-input" type="checkbox" class="input">
+
                 </div>
                 <div class="card__footer">
-                    <a class="btn btn--read-more">edit</a>
+                    <a id="action-button" class="btn btn--read-more" onclick="update({{.Todo.ID}})">edit</a>
                 </div>
             </div>
         </div>
@@ -147,5 +163,6 @@
     </div>
 </footer>
 <script src="/stylelib/main.js"></script>
+<script src="/stylelib/update.js"></script>
 </body>
 </html>

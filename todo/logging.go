@@ -38,6 +38,14 @@ func (l *loggingService) Delete(id int) (gotodo.Todo, error) {
 	return l.next.Delete(id)
 }
 
-func (l *loggingService) Update(title, description string, status bool) (gotodo.Todo, error) {
-	panic("implement me")
+func (l *loggingService) Update(id int, title, description string, status bool) (gotodo.Todo, error) {
+	l.logger.Info("update todo", zap.Int("id", id), zap.String("title", title), zap.String("description", description), zap.Bool("status", status))
+
+	return l.next.Update(id, title, description, status)
+}
+
+func (l *loggingService) Done(id int, status bool) (gotodo.Todo, error) {
+	l.logger.Info("updates status", zap.Int("id", id), zap.Bool("status", status))
+
+	return l.next.Done(id, status)
 }

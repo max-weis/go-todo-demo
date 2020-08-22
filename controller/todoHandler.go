@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 	gotodo "todo"
@@ -136,5 +135,57 @@ func (t *todoHandler) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) Update(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Update")
+	vars := mux.Vars(r)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		t.logger.Info("could not read id", zap.Error(err))
+		return
+	}
+
+	d := json.NewDecoder(r.Body)
+
+	var req = struct {
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Status      bool   `json:"status"`
+	}{}
+
+	err = d.Decode(&req)
+	if err != nil {
+		t.logger.Info("could not decode request", zap.Error(err))
+		return
+	}
+
+	_, err = t.s.Update(id, req.Title, req.Description, req.Status)
+	if err != nil {
+		t.logger.Info("could not update todo", zap.Error(err))
+		return
+	}
+}
+
+func (t *todoHandler) Done(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		t.logger.Info("could not read id", zap.Error(err))
+		return
+	}
+
+	params := r.URL.Query()
+
+	pStatus := params["status"]
+
+	status, err := strconv.ParseBool(pStatus[0])
+	if err != nil {
+		t.logger.Info("could not read status", zap.Error(err))
+		return
+	}
+
+	_, err = t.s.Done(id, status)
+	if err != nil {
+		t.logger.Info("could not set status of todo", zap.Error(err))
+		return
+	}
 }

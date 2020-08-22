@@ -9,7 +9,8 @@ type Service interface {
 	FindById(id int) (gotodo.Todo, error)
 	FindAll(limit, offset int) ([]gotodo.Todo, error)
 	Delete(id int) (gotodo.Todo, error)
-	Update(title, description string, status bool) (gotodo.Todo, error)
+	Update(id int, title, description string, status bool) (gotodo.Todo, error)
+	Done(id int, status bool) (gotodo.Todo, error)
 }
 
 type service struct {
@@ -24,7 +25,7 @@ func (s *service) Create(title, description string) (gotodo.Todo, error) {
 	if len(title) <= 0 {
 		return gotodo.Todo{}, gotodo.TitleEmptyErr
 	}
-	if len(title) <= 50 {
+	if len(title) >= 50 {
 		return gotodo.Todo{}, gotodo.TitleSizeErr
 	}
 
@@ -43,6 +44,17 @@ func (s *service) Delete(id int) (gotodo.Todo, error) {
 	return s.repository.Delete(id)
 }
 
-func (s *service) Update(title, description string, status bool) (gotodo.Todo, error) {
-	panic("implement me")
+func (s *service) Update(id int, title, description string, status bool) (gotodo.Todo, error) {
+	if len(title) <= 0 {
+		return gotodo.Todo{}, gotodo.TitleEmptyErr
+	}
+	if len(title) >= 50 {
+		return gotodo.Todo{}, gotodo.TitleSizeErr
+	}
+
+	return s.repository.Update(id, title, description, status)
+}
+
+func (s *service) Done(id int, status bool) (gotodo.Todo, error) {
+	return s.repository.Done(id, status)
 }
