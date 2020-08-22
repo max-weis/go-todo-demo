@@ -1,5 +1,7 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Go Todo App</title>
     <link rel="stylesheet" href="/stylelib/styles.css">
     <link rel="stylesheet" href="/stylelib/custom.css">
@@ -130,6 +132,7 @@
                                 </td>
                                 <td>{{$todo.ID}}</td>
                                 <td>{{$todo.Title}}</td>
+                                <td onclick="remove({{$todo.ID}})">&#10005;</td>
                             </tr>
                         {{end}}
                         </tbody>
@@ -216,5 +219,6 @@
 </footer>
 <script src="/stylelib/main.js"></script>
 <script src="/stylelib/pagination.js"></script>
+<script src="/stylelib/remove.js"></script>
 </body>
 </html>

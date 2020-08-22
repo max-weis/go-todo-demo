@@ -40,7 +40,7 @@ func (s *service) FindAll(limit, offset int) ([]gotodo.Todo, error) {
 }
 
 func (s *service) Delete(id int) (gotodo.Todo, error) {
-	panic("implement me")
+	return s.repository.Delete(id)
 }
 
 func (s *service) Update(title, description string, status bool) (gotodo.Todo, error) {

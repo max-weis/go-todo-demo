@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
+	"go.uber.org/zap"
 	"net/http"
 	"todo/todo"
 )
@@ -9,21 +10,22 @@ import (
 type Server struct {
 	Todo todo.Service
 
+	logger zap.Logger
 	Router *mux.Router
 }
 
-func NewServer(todoService todo.Service, router *mux.Router) *Server {
+func NewServer(todoService todo.Service, logger zap.Logger, router *mux.Router) *Server {
 	s := &Server{Todo: todoService, Router: router}
-	h := todoHandler{s: todoService}
+	h := todoHandler{s: todoService, logger: logger}
 	e := errorHandler{}
 
 	s.Router.HandleFunc("/", redirect).Methods("GET")
 
 	s.Router.HandleFunc("/todo/{id}", h.FindById).Methods("GET")
-	s.Router.HandleFunc("/todo", h.FindAll).Methods("GET")
+	s.Router.HandleFunc("/todo", h.FindAll).Methods("GET", "DELETE") // redirects dont change method
 	s.Router.HandleFunc("/todo", h.Create).Methods("POST")
 	s.Router.HandleFunc("/todo/{id}", h.Update).Methods("PUT")
-	s.Router.HandleFunc("/todo", h.Delete).Methods("DELETE")
+	s.Router.HandleFunc("/todo/{id}", h.Delete).Methods("DELETE")
 
 	s.Router.HandleFunc("/error", e.Error).Methods("GET")
 

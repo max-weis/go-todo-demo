@@ -2,7 +2,6 @@ package sqlite
 
 import (
 	"github.com/jinzhu/gorm"
-	"log"
 	"todo"
 )
 
@@ -41,13 +40,14 @@ func (t *todoRepository) FindAll(limit, offset int) ([]gotodo.Todo, error) {
 	var todos []gotodo.Todo
 	find := t.db.Limit(limit).Offset(offset).Find(&todos)
 
-	log.Printf("found %d todos", len(todos))
-
 	return todos, find.Error
 }
 
 func (t *todoRepository) Delete(id int) (gotodo.Todo, error) {
-	panic("implement me")
+	var todo gotodo.Todo
+	delete := t.db.Unscoped().Delete(&todo, id)
+
+	return todo, delete.Error
 }
 
 func (t *todoRepository) Update(title, description string, status bool) (gotodo.Todo, error) {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 	gotodo "todo"
 	"todo/controller"
@@ -13,8 +13,13 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
+var logger zap.Logger
+
 func main() {
-	log.Println("start server")
+	initLogger()
+	defer logger.Sync()
+
+	logger.Info("start server")
 
 	db := initDB()
 	defer db.Close()
@@ -24,15 +29,29 @@ func main() {
 
 	todoRepository = sqlite.NewTodoRepository(*db)
 	todoService = todo.NewService(todoRepository)
-	todoService = todo.NewLoggingService(todoService)
+	todoService = todo.NewLoggingService(todoService, logger)
 
 	router := mux.NewRouter()
-	srv := controller.NewServer(todoService, router)
+	srv := controller.NewServer(todoService, logger, router)
 
-	log.Println("listening on port 8080")
+	logger.Info("listening on port 8080")
 
 	http.ListenAndServe("0.0.0.0:8080", srv)
 
+}
+
+func initLogger() {
+	cfg := zap.NewProductionConfig()
+	cfg.OutputPaths = []string{
+		"./log/monitoring.log",
+		"stdout",
+	}
+	build, err := cfg.Build()
+	if err != nil {
+		panic("cannot init logger")
+	}
+
+	logger = *build
 }
 
 func initDB() *gorm.DB {
@@ -51,6 +70,6 @@ func initDB() *gorm.DB {
 	db.Create(&gotodo.Todo{Model: gorm.Model{}, Title: "Phasellus lacinia sollicitudin erat, a.", Description: "Etiam egestas malesuada augue et lacinia. Cras at eleifend ligula, nec accumsan justo. Aliquam eget dictum elit, id aliquam elit.", Status: true})
 	db.Create(&gotodo.Todo{Model: gorm.Model{}, Title: "Vivamus accumsan diam et tortor.", Description: "Maecenas non tempus magna. Nam vehicula diam dui. Vestibulum non maximus nibh. Aenean est lacus, faucibus quis interdum quis, maximus.", Status: false})
 
-	log.Println("db initialized")
+	logger.Info("db initialized")
 	return db
 }
