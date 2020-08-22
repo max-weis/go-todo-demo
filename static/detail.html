@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Go Todo App</title>
     <link rel="stylesheet" href="/stylelib/styles.css">
-    <link rel="stylesheet" href="/stylelib/custom.css">
+    <link rel="stylesheet" href="/index.css">
     <link rel="icon" href="https://www.openknowledge.de//wp-content/themes/okw/public/favicon/favicon-16x16.png">
 </head>
 <body>
@@ -110,6 +110,7 @@
 
 <div class="container">
     <div class="row justify-center">
+        <span onclick="back()" class="back">&larr; <u><i>back</i></u></span>
         <div class="card w-6">
             <div class="card__content card__content--event">
                 <div class="card__header">
@@ -121,13 +122,15 @@
                     <strong>Title:</strong>
                     <p id="title">{{.Todo.Title}}</p>
                     <div class="form-control">
-                        <input style="display: none" id="title-input" type="text" class="input" name="title" value="{{.Todo.Title}}">
+                        <input style="display: none" id="title-input" type="text" class="input" name="title"
+                               value="{{.Todo.Title}}">
                     </div>
                     <br>
                     <strong>Description:</strong>
                     <p id="description">{{.Todo.Description}}</p>
                     <div class="form-control">
-                        <textarea style="display: none" id="description-input" class="input" name="description">{{.Todo.Description}}</textarea>
+                        <textarea style="display: none" id="description-input" class="input"
+                                  name="description">{{.Todo.Description}}</textarea>
                     </div>
                     <br>
                     <strong>Status:</strong>
@@ -163,6 +166,6 @@
     </div>
 </footer>
 <script src="/stylelib/main.js"></script>
-<script src="/stylelib/update.js"></script>
+<script src="/index.js"></script>
 </body>
 </html>

@@ -33,8 +33,7 @@ func NewServer(todoService todo.Service, logger zap.Logger, router *mux.Router) 
 
 	s.Router.HandleFunc("/error", e.Error).Methods("GET")
 
-	staticDir := "/stylelib/"
-	s.Router.PathPrefix(staticDir).Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("./static"+staticDir))))
+	s.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
 	return s
 }

@@ -38,11 +38,8 @@ func (t *todoHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) FindById(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		t.logger.Info("could not read id", zap.Error(err))
+	id, ok := t.getID(r)
+	if !ok {
 		return
 	}
 
@@ -106,22 +103,19 @@ func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		t.logger.Info("could not read id", zap.Error(err))
+	id, ok := t.getID(r)
+	if !ok {
 		return
 	}
 
-	d := json.NewDecoder(r.Body)
+	decoder := json.NewDecoder(r.Body)
 
 	var req = struct {
 		Offset int
 		Limit  int
 	}{}
 
-	err = d.Decode(&req)
+	err := decoder.Decode(&req)
 	if err != nil {
 		t.logger.Info("could not decode request", zap.Error(err))
 		return
@@ -135,15 +129,12 @@ func (t *todoHandler) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) Update(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		t.logger.Info("could not read id", zap.Error(err))
+	id, ok := t.getID(r)
+	if !ok {
 		return
 	}
 
-	d := json.NewDecoder(r.Body)
+	decoder := json.NewDecoder(r.Body)
 
 	var req = struct {
 		Title       string `json:"title"`
@@ -151,7 +142,7 @@ func (t *todoHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Status      bool   `json:"status"`
 	}{}
 
-	err = d.Decode(&req)
+	err := decoder.Decode(&req)
 	if err != nil {
 		t.logger.Info("could not decode request", zap.Error(err))
 		return
@@ -165,19 +156,14 @@ func (t *todoHandler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) Done(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		t.logger.Info("could not read id", zap.Error(err))
+	id, ok := t.getID(r)
+	if !ok {
 		return
 	}
 
-	params := r.URL.Query()
+	params := r.URL.Query()["status"]
 
-	pStatus := params["status"]
-
-	status, err := strconv.ParseBool(pStatus[0])
+	status, err := strconv.ParseBool(params[0])
 	if err != nil {
 		t.logger.Info("could not read status", zap.Error(err))
 		return
@@ -188,4 +174,14 @@ func (t *todoHandler) Done(w http.ResponseWriter, r *http.Request) {
 		t.logger.Info("could not set status of todo", zap.Error(err))
 		return
 	}
+}
+
+func (t *todoHandler) getID(r *http.Request) (int, bool) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		t.logger.Info("could not read id", zap.Error(err))
+		return -1, false
+	}
+
+	return id, true
 }
