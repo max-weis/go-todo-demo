@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
@@ -17,10 +18,12 @@ type todoHandler struct {
 }
 
 func (t *todoHandler) Create(w http.ResponseWriter, r *http.Request) {
+	var e []error
+
 	err := r.ParseForm()
 	if err != nil {
 		t.logger.Info("could not parse form", zap.Error(err))
-		return
+		e = append(e, err)
 	}
 
 	title := r.Form["title"][0]
@@ -29,6 +32,11 @@ func (t *todoHandler) Create(w http.ResponseWriter, r *http.Request) {
 	todo, err := t.s.Create(title, description)
 	if err != nil {
 		t.logger.Info("could not create todo", zap.Error(err))
+		e = append(e, err)
+	}
+
+	if len(e) > 0 {
+		t.showError(w, e)
 		return
 	}
 
@@ -38,14 +46,21 @@ func (t *todoHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) FindById(w http.ResponseWriter, r *http.Request) {
+	var e []error
+
 	id, ok := t.getID(r)
 	if !ok {
-		return
+		e = append(e, errors.New("could not read id"))
 	}
 
 	todo, err := t.s.FindById(id)
 	if err != nil {
 		t.logger.Info("could not find todo", zap.Error(err))
+		e = append(e, err)
+	}
+
+	if len(e) > 0 {
+		t.showError(w, e)
 		return
 	}
 
@@ -63,6 +78,8 @@ func (t *todoHandler) FindById(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {
+	var e []error
+
 	params := r.URL.Query()
 
 	pLimit := params["limit"]
@@ -71,18 +88,23 @@ func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 	limit, err := strconv.Atoi(pLimit[0])
 	if err != nil {
 		t.logger.Info("could not read limit", zap.Error(err))
-		return
+		e = append(e, err)
 	}
 
 	offset, err := strconv.Atoi(pOffset[0])
 	if err != nil {
 		t.logger.Info("could not read offset", zap.Error(err))
-		return
+		e = append(e, err)
 	}
 
 	todos, err := t.s.FindAll(limit, offset)
 	if err != nil {
 		t.logger.Info("could not find todos", zap.Error(err))
+		e = append(e, err)
+	}
+
+	if len(e) > 0 {
+		t.showError(w, e)
 		return
 	}
 
@@ -103,38 +125,43 @@ func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *todoHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	var e []error
+
 	id, ok := t.getID(r)
 	if !ok {
-		return
+		e = append(e, errors.New("could not read id"))
 	}
-
-	decoder := json.NewDecoder(r.Body)
 
 	var req = struct {
 		Offset int
 		Limit  int
 	}{}
 
-	err := decoder.Decode(&req)
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		t.logger.Info("could not decode request", zap.Error(err))
-		return
+		e = append(e, err)
 	}
 
 	_, err = t.s.Delete(id)
 	if err != nil {
 		t.logger.Info("could not delete todo", zap.Error(err))
+		e = append(e, err)
+	}
+
+	if len(e) > 0 {
+		t.showError(w, e)
 		return
 	}
 }
 
 func (t *todoHandler) Update(w http.ResponseWriter, r *http.Request) {
+	var e []error
+
 	id, ok := t.getID(r)
 	if !ok {
-		return
+		e = append(e, errors.New("could not read id"))
 	}
-
-	decoder := json.NewDecoder(r.Body)
 
 	var req = struct {
 		Title       string `json:"title"`
@@ -142,23 +169,30 @@ func (t *todoHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Status      bool   `json:"status"`
 	}{}
 
-	err := decoder.Decode(&req)
+	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		t.logger.Info("could not decode request", zap.Error(err))
-		return
+		e = append(e, err)
 	}
 
 	_, err = t.s.Update(id, req.Title, req.Description, req.Status)
 	if err != nil {
 		t.logger.Info("could not update todo", zap.Error(err))
+		e = append(e, err)
+	}
+
+	if len(e) > 0 {
+		t.showError(w, e)
 		return
 	}
 }
 
 func (t *todoHandler) Done(w http.ResponseWriter, r *http.Request) {
+	var e []error
+
 	id, ok := t.getID(r)
 	if !ok {
-		return
+		e = append(e, errors.New("could not read id"))
 	}
 
 	params := r.URL.Query()["status"]
@@ -166,12 +200,17 @@ func (t *todoHandler) Done(w http.ResponseWriter, r *http.Request) {
 	status, err := strconv.ParseBool(params[0])
 	if err != nil {
 		t.logger.Info("could not read status", zap.Error(err))
-		return
+		e = append(e, err)
 	}
 
 	_, err = t.s.Done(id, status)
 	if err != nil {
 		t.logger.Info("could not set status of todo", zap.Error(err))
+		e = append(e, err)
+	}
+
+	if len(e) > 0 {
+		t.showError(w, e)
 		return
 	}
 }
@@ -184,4 +223,18 @@ func (t *todoHandler) getID(r *http.Request) (int, bool) {
 	}
 
 	return id, true
+}
+
+func (t *todoHandler) showError(w http.ResponseWriter, e []error) {
+	var resp = struct {
+		Errors []error
+	}{Errors: e}
+
+	tmpl, err := template.ParseFiles("static/error.html")
+	if err != nil {
+		t.logger.Info("could not parse file", zap.Error(err))
+		return
+	}
+
+	tmpl.Execute(w, resp)
 }

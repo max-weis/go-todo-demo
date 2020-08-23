@@ -31,7 +31,7 @@ func NewServer(todoService todo.Service, logger zap.Logger, router *mux.Router) 
 	s.Router.HandleFunc("/todo/{id}", h.Done).Methods("PATCH")
 	s.Router.HandleFunc("/todo/{id}", h.Delete).Methods("DELETE")
 
-	s.Router.HandleFunc("/error", e.Error).Methods("GET")
+	s.Router.HandleFunc("/error", e.Error).Methods("POST")
 
 	s.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 

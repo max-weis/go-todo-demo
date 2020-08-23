@@ -109,7 +109,25 @@
 
 <div class="container">
     <div class="row justify-center">
-        <h1>Error!</h1>
+        <div class="card w-6">
+            <div class="card__content card__content--event">
+                <div class="card__header">
+                    <div class="section-header">
+                        <h2 class="section-header__primary">Error</h2>
+                    </div>
+                </div>
+                <div class="card__body">
+                    <dl>
+                        {{range $error := .Errors}}
+                            <dd>- {{$error.Error}}</dd>
+                        {{end}}
+                    </dl>
+                </div>
+                <div class="card__footer">
+                    <a id="action-button" class="btn btn--read-more" onclick="showList()">Back</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -129,5 +147,6 @@
     </div>
 </footer>
 <script src="/stylelib/main.js"></script>
+<script src="/index.js"></script>
 </body>
 </html>

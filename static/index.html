@@ -125,7 +125,7 @@
                         </thead>
                         <tbody>
                         {{range $todo := .Todos}}
-                            <tr>
+                            <tr class="tablerow">
                                 <td><input type="checkbox" class="input" onclick="changeStatus(this,{{$todo.ID}})"
                                             {{if (eq $todo.Status true)}}
                                         checked
