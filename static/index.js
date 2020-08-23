@@ -1,6 +1,8 @@
+const host = "http://" + location.hostname + ":" + location.port;
+
 function changeStatus(elem, id) {
     let request = new XMLHttpRequest();
-    request.open("PATCH", "http://localhost:8080/todo/" + id + "?status=" + elem.checked, false)
+    request.open("PATCH", host + "/todo/" + id + "?status=" + elem.checked, false)
     request.send(null)
 
     location.reload()
@@ -26,32 +28,31 @@ function update(id) {
         descriptionInput.style.cssText = "display: block;"
         statusInput.style.cssText = "display: block;"
         return
-    } else {
-        title.style.cssText = "display: block;"
-        description.style.cssText = "display: block;"
-        status.style.cssText = "display: block;"
-
-        titleInput.style.cssText = "display: none;"
-        descriptionInput.style.cssText = "display: none;"
-        statusInput.style.cssText = "display: none;"
-
-        let request = new XMLHttpRequest();
-        request.open("PUT", "http://localhost:8080/todo/" + id, false)
-        let body = JSON.stringify({
-            "title": titleInput.value,
-            "description": descriptionInput.value,
-            "status": statusInput.value === "true"
-        });
-
-        request.send(body)
-
-        window.location.href = "http://" + location.hostname + ":" + location.port + "/todo/" + id
     }
+    title.style.cssText = "display: block;"
+    description.style.cssText = "display: block;"
+    status.style.cssText = "display: block;"
+
+    titleInput.style.cssText = "display: none;"
+    descriptionInput.style.cssText = "display: none;"
+    statusInput.style.cssText = "display: none;"
+
+    let request = new XMLHttpRequest();
+    request.open("PUT", host + "/todo/" + id, false)
+    let body = JSON.stringify({
+        "title": titleInput.value,
+        "description": descriptionInput.value,
+        "status": statusInput.value === "true"
+    });
+
+    request.send(body)
+
+    showDetail(id)
 }
 
 function remove(id) {
     let request = new XMLHttpRequest();
-    request.open("DELETE", "http://localhost:8080/todo/" + id, false)
+    request.open("DELETE", host + "/todo/" + id, false)
     let urlParams = new URLSearchParams(window.location.search);
     let body = JSON.stringify({
         "offset": parseInt(urlParams.get('offset')),
@@ -63,9 +64,8 @@ function remove(id) {
 }
 
 function changePage(elem, selectedLimit) {
-    let urlParams = new URLSearchParams(window.location.search);
-    let offset = parseInt(urlParams.get('offset'));
-    let limit = parseInt(urlParams.get('limit'));
+    let offset = parseInt(localStorage.getItem("offset"));
+    let limit = parseInt(localStorage.getItem("limit"));
 
     if (selectedLimit != null) {
         limit = selectedLimit
@@ -81,13 +81,26 @@ function changePage(elem, selectedLimit) {
         offset += 1
     }
 
-    window.location.href = "http://" + location.hostname + ":" + location.port + "/todo?offset=" + offset + "&limit=" + limit
+    localStorage.setItem("limit", limit.toString())
+    localStorage.setItem("offset", offset.toString())
+
+    showList()
 }
 
-function back() {
-    window.location.href = "http://" + location.hostname + ":" + location.port + "/todo?offset=0&limit=5"
+function showList() {
+    let offset = localStorage.getItem("offset");
+    if (offset === null || offset === "") {
+        offset = 0
+    }
+
+    let limit = localStorage.getItem("limit");
+    if (limit === null || limit === "") {
+        limit = 5
+    }
+
+    window.location.href = host + "/todo?offset=" + offset + "&limit=" + limit
 }
 
 function showDetail(id) {
-    window.location.href = "http://" + location.hostname + ":" + location.port + "/todo/" + id
+    window.location.href = host + "/todo/" + id
 }
