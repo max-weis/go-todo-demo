@@ -1,4 +1,4 @@
-module todo
+module gotodo
 
 go 1.14
 

@@ -2,7 +2,7 @@ package sqlite
 
 import (
 	"github.com/jinzhu/gorm"
-	"todo"
+	"gotodo"
 )
 
 type TodoRepository interface {

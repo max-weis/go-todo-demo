@@ -3,11 +3,11 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
+	"gotodo"
+	"gotodo/controller"
+	"gotodo/sqlite"
+	"gotodo/todo"
 	"net/http"
-	gotodo "todo"
-	"todo/controller"
-	"todo/sqlite"
-	"todo/todo"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"

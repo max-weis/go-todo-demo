@@ -1,7 +1,7 @@
 package todo
 
 import (
-	"todo"
+	"gotodo"
 )
 
 type Service interface {

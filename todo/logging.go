@@ -2,7 +2,7 @@ package todo
 
 import (
 	"go.uber.org/zap"
-	"todo"
+	"gotodo"
 )
 
 type loggingService struct {

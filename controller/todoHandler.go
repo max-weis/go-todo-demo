@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
+	"gotodo"
 	"html/template"
 	"net/http"
 	"strconv"
-	gotodo "todo"
 )
 
 type todoHandler struct {
