@@ -31,7 +31,7 @@ func main() {
 	todoService = todo.NewLoggingService(todoService, logger)
 
 	router := mux.NewRouter()
-	srv := server.NewServer(todoService, logger, router)
+	srv := server.NewServer(todoService, logger, router, db)
 
 	logger.Info("listening on port 8080")
 
