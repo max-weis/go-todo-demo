@@ -1,20 +1,20 @@
-package controller
+package server
 
 import (
 	"github.com/gorilla/mux"
-	gotodo "github.com/max-weis/go-todo-demo"
+	"github.com/max-weis/go-todo-demo/todo"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 type Server struct {
-	Todo gotodo.Service
+	Todo todo.Service
 
 	logger zap.Logger
 	Router *mux.Router
 }
 
-func NewServer(todoService gotodo.Service, logger zap.Logger, router *mux.Router) *Server {
+func NewServer(todoService todo.Service, logger zap.Logger, router *mux.Router) *Server {
 	s := &Server{Todo: todoService, Router: router}
 	h := todoHandler{s: todoService, logger: logger}
 	e := errorHandler{}

@@ -1,11 +1,11 @@
-package controller
+package server
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gorilla/mux"
-	gotodo "github.com/max-weis/go-todo-demo"
+	todo2 "github.com/max-weis/go-todo-demo/todo"
 	"go.uber.org/zap"
 	"html/template"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 )
 
 type todoHandler struct {
-	s      gotodo.Service
+	s      todo2.Service
 	logger zap.Logger
 }
 
@@ -65,7 +65,7 @@ func (t *todoHandler) FindById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var resp = struct {
-		Todo gotodo.Todo
+		Todo todo2.Todo
 	}{Todo: todo}
 
 	tmpl, err := template.ParseFiles("static/detail.html")
@@ -109,7 +109,7 @@ func (t *todoHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var resp = struct {
-		Todos []gotodo.Todo `json:"todos"`
+		Todos []todo2.Todo `json:"todos"`
 
 		Offset int
 		Limit  int

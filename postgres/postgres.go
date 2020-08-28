@@ -1,17 +1,17 @@
 package postgres
 
 import (
-	gotodo "github.com/max-weis/go-todo-demo"
+	"github.com/max-weis/go-todo-demo/todo"
 	"gorm.io/gorm"
 )
 
 type TodoRepository interface {
-	Create(title, description string) (gotodo.Todo, error)
-	FindById(id int) (gotodo.Todo, error)
-	FindAll(limit, offset int) ([]gotodo.Todo, error)
-	Delete(id int) (gotodo.Todo, error)
-	Update(id int, title, description string, status bool) (gotodo.Todo, error)
-	Done(id int, status bool) (gotodo.Todo, error)
+	Create(title, description string) (todo.Todo, error)
+	FindById(id int) (todo.Todo, error)
+	FindAll(limit, offset int) ([]todo.Todo, error)
+	Delete(id int) (todo.Todo, error)
+	Update(id int, title, description string, status bool) (todo.Todo, error)
+	Done(id int, status bool) (todo.Todo, error)
 }
 
 type todoRepository struct {
@@ -22,37 +22,37 @@ func NewTodoRepository(db gorm.DB) *todoRepository {
 	return &todoRepository{db: db}
 }
 
-func (t *todoRepository) Create(title, description string) (gotodo.Todo, error) {
-	todo := gotodo.NewTodo(title, description)
+func (t *todoRepository) Create(title, description string) (todo.Todo, error) {
+	todo := todo.NewTodo(title, description)
 	newTodo := t.db.Create(todo)
 
 	return *todo, newTodo.Error
 }
 
-func (t *todoRepository) FindById(id int) (gotodo.Todo, error) {
-	var todo gotodo.Todo
+func (t *todoRepository) FindById(id int) (todo.Todo, error) {
+	var todo todo.Todo
 
 	first := t.db.Find(&todo, id)
 
 	return todo, first.Error
 }
 
-func (t *todoRepository) FindAll(limit, offset int) ([]gotodo.Todo, error) {
-	var todos []gotodo.Todo
+func (t *todoRepository) FindAll(limit, offset int) ([]todo.Todo, error) {
+	var todos []todo.Todo
 	find := t.db.Limit(limit).Offset(offset).Find(&todos)
 
 	return todos, find.Error
 }
 
-func (t *todoRepository) Delete(id int) (gotodo.Todo, error) {
-	var todo gotodo.Todo
+func (t *todoRepository) Delete(id int) (todo.Todo, error) {
+	var todo todo.Todo
 	delete := t.db.Unscoped().Delete(&todo, id)
 
 	return todo, delete.Error
 }
 
-func (t *todoRepository) Update(id int, title, description string, status bool) (gotodo.Todo, error) {
-	var todo gotodo.Todo
+func (t *todoRepository) Update(id int, title, description string, status bool) (todo.Todo, error) {
+	var todo todo.Todo
 
 	t.db.First(&todo, id)
 
@@ -65,8 +65,8 @@ func (t *todoRepository) Update(id int, title, description string, status bool) 
 	return todo, newTodo.Error
 }
 
-func (t *todoRepository) Done(id int, status bool) (gotodo.Todo, error) {
-	var todo gotodo.Todo
+func (t *todoRepository) Done(id int, status bool) (todo.Todo, error) {
+	var todo todo.Todo
 
 	t.db.First(&todo, id)
 
