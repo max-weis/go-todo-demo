@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+
+  go-todo:
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_DB: sqlite
+      POSTGRES_USER: sqlite
+      POSTGRES_PASSWORD: sqlite

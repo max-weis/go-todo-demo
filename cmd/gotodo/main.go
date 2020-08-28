@@ -3,10 +3,11 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
-	"gotodo"
-	"gotodo/controller"
-	"gotodo/sqlite"
-	"gotodo/todo"
+
+	gotodo "github.com/max-weis/go-todo-demo"
+	"github.com/max-weis/go-todo-demo/controller"
+	"github.com/max-weis/go-todo-demo/sqlite"
+	"github.com/max-weis/go-todo-demo/todo"
 	"net/http"
 
 	"github.com/jinzhu/gorm"
@@ -57,6 +58,7 @@ func initLogger() {
 func initDB() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "file::memory:?cache=shared")
 	if err != nil {
+		logger.Error("error", zap.Error(err))
 		panic("could not read sqlite db")
 	}
 

@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/gorilla/mux"
+	gotodo "github.com/max-weis/go-todo-demo"
 	"go.uber.org/zap"
-	"gotodo"
 	"net/http"
 )
 

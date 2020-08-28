@@ -1,4 +1,4 @@
-module gotodo
+module github.com/max-weis/go-todo-demo
 
 go 1.14
 

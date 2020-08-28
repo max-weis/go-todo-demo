@@ -1,7 +1,7 @@
 package todo
 
 import (
-	"gotodo"
+	gotodo "github.com/max-weis/go-todo-demo"
 )
 
 type Service interface {
