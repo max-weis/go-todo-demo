@@ -37,6 +37,7 @@ func (h *healthHandler) Ready(w http.ResponseWriter, r *http.Request) {
 func (h *healthHandler) sendResponse(w http.ResponseWriter, status bool) {
 	resp := health{Status: status}
 
+	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(resp)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
