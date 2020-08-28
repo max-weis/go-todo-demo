@@ -1,0 +1,25 @@
+replicaCount: 1
+image:
+  repository: maxweis/go-todo-demo
+  version: v1.0
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 8080
+env:
+  - name: DB_HOST
+    value: gotodo-postgresql
+  - name: DB_PORT
+    value: 5432 | quote
+  - name: DB_NAME
+    value: postgres
+  - name: DB_USER
+    value: postgres
+  - name: DB_PASS
+    value: postgres
+# TODO: fix auth error. setup user for postgres
+postgresql:
+  postgresqlDatabase: postgres
+  global:
+    postgresql:
+      postgresqlPassword: postgres
