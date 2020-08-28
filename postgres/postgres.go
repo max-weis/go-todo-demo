@@ -1,8 +1,8 @@
-package sqlite
+package postgres
 
 import (
-	"github.com/jinzhu/gorm"
 	gotodo "github.com/max-weis/go-todo-demo"
+	"gorm.io/gorm"
 )
 
 type TodoRepository interface {

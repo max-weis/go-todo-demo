@@ -11,7 +11,9 @@ services:
 
   postgres:
     image: postgres:12-alpine
+    ports:
+      - 5432:5432
     environment:
-      POSTGRES_DB: sqlite
-      POSTGRES_USER: sqlite
-      POSTGRES_PASSWORD: sqlite
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

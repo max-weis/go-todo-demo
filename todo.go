@@ -2,7 +2,7 @@ package gotodo
 
 import (
 	"errors"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Todo struct {

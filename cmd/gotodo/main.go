@@ -6,12 +6,12 @@ import (
 
 	gotodo "github.com/max-weis/go-todo-demo"
 	"github.com/max-weis/go-todo-demo/controller"
-	"github.com/max-weis/go-todo-demo/sqlite"
+	"github.com/max-weis/go-todo-demo/postgres"
 	"github.com/max-weis/go-todo-demo/todo"
 	"net/http"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	pq "gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var logger zap.Logger
@@ -23,12 +23,11 @@ func main() {
 	logger.Info("start server")
 
 	db := initDB()
-	defer db.Close()
 
-	var todoRepository sqlite.TodoRepository
+	var todoRepository postgres.TodoRepository
 	var todoService todo.Service
 
-	todoRepository = sqlite.NewTodoRepository(*db)
+	todoRepository = postgres.NewTodoRepository(*db)
 	todoService = todo.NewService(todoRepository)
 	todoService = todo.NewLoggingService(todoService, logger)
 
@@ -56,10 +55,11 @@ func initLogger() {
 }
 
 func initDB() *gorm.DB {
-	db, err := gorm.Open("sqlite3", "file::memory:?cache=shared")
+	dsn := "host=localhost user=postgres password=postgres dbname=postgres port=5432 sslmode=disable"
+	db, err := gorm.Open(pq.Open(dsn), &gorm.Config{})
 	if err != nil {
 		logger.Error("error", zap.Error(err))
-		panic("could not read sqlite db")
+		panic("could not read postgres db")
 	}
 
 	// create table
