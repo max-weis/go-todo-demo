@@ -54,8 +54,9 @@ func initLogger() {
 }
 
 func initDB() *gorm.DB {
-	dsn := "host=postgres user=postgres password=postgres dbname=postgres port=5432 sslmode=disable"
-	db, err := gorm.Open(pq.Open(dsn), &gorm.Config{})
+	config := NewConfig()
+
+	db, err := gorm.Open(pq.Open(config.getDSN()), &gorm.Config{})
 	if err != nil {
 		logger.Error("error", zap.Error(err))
 		panic("could not read postgres db")
