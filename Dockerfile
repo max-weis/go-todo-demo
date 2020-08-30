@@ -5,7 +5,7 @@ WORKDIR $GOPATH/app/
 RUN apk add git
 
 # copy and download dependencies
-COPY go.* .
+COPY go.* ./
 RUN go mod download
 
 #compile app

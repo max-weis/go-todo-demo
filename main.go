@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"go.uber.org/zap"
 
 	"github.com/max-weis/go-todo-demo/postgres"
@@ -30,13 +32,15 @@ func main() {
 	todoService = todo.NewService(todoRepository)
 	todoService = todo.NewLoggingService(todoService, logger)
 
+	// definition at the bottom
+	todoService = todo.NewInstrumentingService(createCounter, createLatency, findOneCounter, findOneLatency, findAllCounter, findAllLatency, deleteCounter, deleteLatency, updateCounter, updateLatency, doneCounter, doneLatency, todoService)
+
 	router := mux.NewRouter()
 	srv := server.NewServer(todoService, logger, router, db)
 
 	logger.Info("listening on port 8080")
 
 	http.ListenAndServe("0.0.0.0:8080", srv)
-
 }
 
 func initLogger() {
@@ -75,3 +79,78 @@ func initDB() *gorm.DB {
 	logger.Info("db initialized")
 	return db
 }
+
+var (
+	createCounter = promauto.NewCounter(
+		prometheus.CounterOpts{
+			Name: "create_total",
+			Help: "The total number of created todos",
+		},
+	)
+	createLatency = promauto.NewSummary(
+		prometheus.SummaryOpts{
+			Name: "create_latency",
+			Help: "Total duration of create todo requests",
+		},
+	)
+	findOneCounter = promauto.NewCounter(
+		prometheus.CounterOpts{
+			Name: "find_one_total",
+			Help: "The total number of found todos",
+		},
+	)
+	findOneLatency = promauto.NewSummary(
+		prometheus.SummaryOpts{
+			Name: "find_one_latency",
+			Help: "Total duration of find one todo requests",
+		},
+	)
+	findAllCounter = promauto.NewCounter(
+		prometheus.CounterOpts{
+			Name: "find_all_total",
+			Help: "The total number of all found todos",
+		},
+	)
+	findAllLatency = promauto.NewSummary(
+		prometheus.SummaryOpts{
+			Name: "find_all_latency",
+			Help: "Total duration of find all todo requests",
+		},
+	)
+	deleteCounter = promauto.NewCounter(
+		prometheus.CounterOpts{
+			Name: "delete_total",
+			Help: "The total number of deleted todos",
+		},
+	)
+	deleteLatency = promauto.NewSummary(
+		prometheus.SummaryOpts{
+			Name: "delete_latency",
+			Help: "Total duration of deleted todo requests",
+		},
+	)
+	updateCounter = promauto.NewCounter(
+		prometheus.CounterOpts{
+			Name: "update_total",
+			Help: "The total number of updated todos",
+		},
+	)
+	updateLatency = promauto.NewSummary(
+		prometheus.SummaryOpts{
+			Name: "update_latency",
+			Help: "Total duration of updated todo requests",
+		},
+	)
+	doneCounter = promauto.NewCounter(
+		prometheus.CounterOpts{
+			Name: "done_total",
+			Help: "The total number of done todos",
+		},
+	)
+	doneLatency = promauto.NewSummary(
+		prometheus.SummaryOpts{
+			Name: "done_latency",
+			Help: "Total duration of done todo requests",
+		},
+	)
+)

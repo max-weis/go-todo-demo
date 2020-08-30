@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gorilla/mux"
 	"github.com/max-weis/go-todo-demo/todo"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"net/http"
@@ -38,6 +39,8 @@ func NewServer(todoService todo.Service, logger zap.Logger, router *mux.Router, 
 
 	s.Router.HandleFunc("/health/live", h.Live).Methods("GET")
 	s.Router.HandleFunc("/health/ready", h.Ready).Methods("GET")
+
+	s.Router.PathPrefix("/metrics").Handler(promhttp.Handler()).Methods("GET")
 
 	s.Router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
