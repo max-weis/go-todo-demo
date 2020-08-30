@@ -4,5 +4,5 @@ metadata:
   name: gotodo-config
 data:
     {{- range .Values.env }}
-  {{ .name }}: {{ .value }}
+  {{ .name }}: {{ .value | quote }}
   {{- end }}
