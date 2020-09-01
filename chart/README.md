@@ -7,6 +7,37 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 ## Values
 
+Here you can change the container image and tag:
+```yaml
+image:
+  repository: maxweis/go-todo-demo
+  version: v1.0
+```
+
+Change the env var:
+```yaml
+env:
+  - name: DB_HOST
+    value: gotodo-postgresql
+  - name: DB_PORT
+    value: 5432
+  - name: DB_NAME
+    value: postgres
+  - name: DB_USER
+    value: postgres
+  - name: DB_PASS
+    value: postgres
+```
+
+Change the postgres user credentials:
+```yaml
+postgresql:
+  postgresqlDatabase: postgres
+  global:
+    postgresql:
+      postgresqlPassword: postgres
+```
+
 ## Commands
 
 ### Lint
