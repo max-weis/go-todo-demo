@@ -8,6 +8,8 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 ## Values
 
 Here you can change the container image and tag:
+
+**Chart.yaml**
 ```yaml
 image:
   repository: maxweis/go-todo-demo
@@ -15,6 +17,8 @@ image:
 ```
 
 Change the env var:
+
+**Chart.yaml**
 ```yaml
 env:
   - name: DB_HOST
@@ -30,6 +34,8 @@ env:
 ```
 
 Change the postgres user credentials:
+
+**Chart.yaml**
 ```yaml
 postgresql:
   postgresqlDatabase: postgres
@@ -62,14 +68,14 @@ Get postgres dependency:
 helm dependency build gotodo
 ``` 
 
+Install the chart in your k8s cluster
 ```shell script
 helm install gotodo gotodo
 ``` 
 
 ### Update Values
-```shell script
-helm upgrade gotodo gotodo
-``` 
+
+Change the values in the `Chart.yaml` and run `helm upgrade gotodo gotodo` to apply them 
 
 ### Delete Chart
 ```shell script
